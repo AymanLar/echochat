@@ -1,8 +1,10 @@
+# import os
 import openai
 import argparse
-from historical_figures import short_name,HISTORICAL_FIGURES
+from .historical_figures import short_name,HISTORICAL_FIGURES
 
-openai.api_key = ""
+openai.api_key = "__CODERED__"
+
 def generate_response(prompt):
     response = openai.Completion.create(
         engine="text-davinci-003",  # You can choose a different engine based on availability and performance
@@ -12,7 +14,7 @@ def generate_response(prompt):
     )
     return response.choices[0].text
 
-def main():
+def echochat():
     parser = argparse.ArgumentParser(description='Talk with historical figures.')
     parser.add_argument('figure', type=str, choices=short_name, help='Choose a historical figure')
     args = parser.parse_args()
@@ -20,14 +22,15 @@ def main():
     conversation_history = []
 
     print(f"Initiating conversation with {args.figure.capitalize()}...")
-
+    print(f"{HISTORICAL_FIGURES[args.figure]} : Hi, How can I Help you")
+    
     while True:
+    
         user_input = input("> You: ")
         conversation_history.append(f'You: {user_input}')
         
-        # Determine the assistant's name based on the selected figure
+    # Determine the assistant's name based on the selected figure
         assistant_name = HISTORICAL_FIGURES[args.figure]
-
         conversation_prompt = '\n'.join([f'You: {user_input}', f'{assistant_name}: '])
         response = generate_response(conversation_prompt)
         
@@ -36,4 +39,4 @@ def main():
             exit()
 
 if __name__ == '__main__':
-    main()
+    echochat()
