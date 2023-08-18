@@ -1,9 +1,10 @@
-# import os
+import os
 import openai
 import argparse
 from .historical_figures import short_name,HISTORICAL_FIGURES
 
-openai.api_key = "__CODERED__"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+openai.api_key = OPENAI_API_KEY 
 
 def generate_response(prompt):
     response = openai.Completion.create(
@@ -15,6 +16,10 @@ def generate_response(prompt):
     return response.choices[0].text
 
 def echochat():
+    if openai.api_key is None:
+        print("OPENAI_API_KEY is not set. Exiting.")
+        exit()
+    
     parser = argparse.ArgumentParser(description='Talk with historical figures.')
     parser.add_argument('figure', type=str, choices=short_name, help='Choose a historical figure')
     args = parser.parse_args()
